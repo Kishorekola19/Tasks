@@ -1,0 +1,65 @@
+# Delete and Earn
+
+class Solution:
+    def deleteAndEarn(self, numbers: List[int]) -> int:
+        value_frequency = [0] * 10001
+
+        for value in numbers:
+            value_frequency[value] += 1
+
+        best_score = [0] * 10001
+        best_score[1] = value_frequency[1]
+
+        for value in range(2, 10001):
+            take_current = best_score[value - 2] + value * value_frequency[value]
+            skip_current = best_score[value - 1]
+            best_score[value] = max(take_current, skip_current)
+
+        return best_score[10000]
+
+
+# Partition Equal Subset Sum
+
+class Solution:
+    def canPartition(self, numbers: List[int]) -> bool:
+        total_sum = sum(numbers)
+
+        if total_sum % 2 != 0:
+            return False
+
+        required_sum = total_sum // 2
+        reachable_sum = [False] * (required_sum + 1)
+        reachable_sum[0] = True
+
+        for number in numbers:
+            for current_sum in range(required_sum, number - 1, -1):
+                reachable_sum[current_sum] = (
+                    reachable_sum[current_sum]
+                    or reachable_sum[current_sum - number]
+                )
+
+        return reachable_sum[required_sum]
+
+
+# Target Sum
+
+class Solution:
+    def findTargetSumWays(self, numbers: List[int], target_value: int) -> int:
+        total_sum = sum(numbers)
+
+        if total_sum < abs(target_value):
+            return 0
+
+        if (total_sum + target_value) % 2 != 0:
+            return 0
+
+        positive_sum_needed = (total_sum + target_value) // 2
+        combination_count = [0] * (positive_sum_needed + 1)
+        combination_count[0] = 1
+
+        for number in numbers:
+            for current_sum in range(positive_sum_needed, number - 1, -1):
+                combination_count[current_sum] += combination_count[current_sum - number]
+
+        return combination_count[positive_sum_needed]
+
