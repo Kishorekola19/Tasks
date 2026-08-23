@@ -1,0 +1,135 @@
+Leetcode - 1480:
+
+  class Solution:
+    def runningSum(self, nums: List[int]) -> List[int]:
+        prefix = [nums[0]]*len(nums) 
+        for i in range(1,len(nums)):
+            prefix[i] = nums[i] + prefix[i-1] 
+        return prefix
+
+Leetcode - 303:
+
+  class NumArray:
+  
+      def __init__(self, nums: List[int]):
+          self.nums=nums
+  
+      def sumRange(self, left: int, right: int) -> int:
+          nums=self.nums
+          prefix_sum=[0]*len(nums)
+          prefix_sum[0]=nums[0] 
+          for i in range(1,len(nums)):
+              prefix_sum[i] = prefix_sum[i-1]+nums[i] 
+          
+          if left==0:
+              return prefix_sum[right]
+          
+  
+          return prefix_sum[right] - prefix_sum[left-1]
+          
+  
+  
+  # Your NumArray object will be instantiated and called as such:
+  # obj = NumArray(nums)
+  # param_1 = obj.sumRange(left,right)
+
+
+Leetcode - 1991:
+  class Solution:
+    def findMiddleIndex(self, nums: List[int]) -> int:
+        n=len(nums)
+        total = sum(nums) 
+        left = 0
+        for i in range(n):
+            right = total-left-nums[i] 
+            if left==right:
+                return i 
+            left+=nums[i] 
+        return -1
+
+Leetcode - 742:
+  class Solution:
+    def pivotIndex(self, nums: List[int]) -> int: 
+        # n=len(nums) 
+        # left=[nums[0]]*n 
+        # right = [nums[-1]]*n 
+        # for i in range(1,n): 
+        #     left[i]=nums[i] + left[i-1] 
+
+        # for i in range(n-2,-1,-1):
+        #     right[i] = nums[i] + right[i+1] 
+
+        # print(left) 
+        # print(right)
+        # for i in range(n):
+        #     if left[i] == right[i]:
+        #         return i 
+
+        # return -1  
+
+        total = sum(nums) 
+        left_sum = 0 
+        for i in range(len(nums)):
+            right_sum = total - left_sum - nums[i] 
+
+            if left_sum == right_sum:
+                return i 
+            left_sum+=nums[i] 
+
+        return -1
+
+Leetcode - 560:
+
+  class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        sum=0 
+        count=0 
+        dic={0:1} 
+        for ele in nums:
+            sum+=ele 
+            count+=dic.get(sum-k,0) 
+            dic[sum]=dic.get(sum,0)+1 
+        return count
+
+Leetcode - 525:
+
+  class Solution:
+    def findMaxLength(self, nums: List[int]) -> int:
+        n=len(nums)
+        zero_count=0 
+        one_count=0 
+        max_length=0
+        dic={0:-1}  
+        for i in range(n):
+            if nums[i]==1:
+                one_count+=1 
+            else:
+                zero_count+=1 
+
+            diff = one_count-zero_count 
+
+            if diff in dic:
+                max_length = max(max_length,i-dic[diff]) 
+            else:
+                dic[diff] = i 
+
+        return max_length
+
+Leetcode - 523:
+
+  class Solution:
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        prefix_sum = 0 
+        dic = {0:-1} 
+        for i in range(len(nums)):
+            prefix_sum += nums[i] 
+            
+            remainder = prefix_sum % k 
+
+            if remainder in dic:
+                if i - dic[remainder] >= 2:
+                    return True 
+            else:
+                dic[remainder] = i 
+        
+        return False
